@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
+import { Table } from "./Table/Table";
 import "./App.css";
 
 function App() {
   const [hotReposData, setHotReposData] = useState([
     {
-      id: "test",
-      name: "test",
-      description: "test",
-      stars: "test",
+      id: "",
+      name: "",
+      description: "",
+      stars: "",
     },
   ]);
   const [prolificUsersData, setProlificUserData] = useState([
     {
-      id: "test",
-      login: "test",
-      avatarImage: "test",
-      followers: "test",
+      id: "",
+      login: "",
+      avatarImage: "",
+      followers: "",
     },
   ]);
   const [errRepo, setErrRepo] = useState(null);
@@ -28,7 +29,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         if (data.message) {
-          setErrRepo(data.message);
+          setErrRepo(`There was an error with your request: ${data.message}`);
         } else {
           setErrRepo(null);
           const parsedData = data.items.map(
@@ -45,8 +46,15 @@ function App() {
         }
       })
       .catch((err) => {
-        setHotReposData({});
-        setErrRepo(err);
+        setHotReposData([
+          {
+            id: "",
+            name: "",
+            description: "",
+            stars: "",
+          },
+        ]);
+        setErrRepo(`There was an error with your request: ${err}`);
       });
   };
 
@@ -57,7 +65,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         if (data.message) {
-          setErrUser(data.message);
+          setErrUser(`There was an error with your request: ${data.message}`);
         } else {
           setErrUser(null);
           const parsedData = data.items.map(
@@ -74,8 +82,15 @@ function App() {
         }
       })
       .catch((err) => {
-        setProlificUserData({});
-        setErrUser(err);
+        setProlificUserData([
+          {
+            id: "",
+            login: "",
+            avatarImage: "",
+            followers: "",
+          },
+        ]);
+        setErrUser(`There was an error with your request: ${err}`);
       });
   };
 
@@ -88,37 +103,32 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const constructTable = (data) => {
-    return (
-      <table>
-        <thead>
-          <tr>
-            {Object.keys(data[0]).map((key) => {
-              return <th>{key}</th>;
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item) => {
-            return (
-              <tr>
-                {Object.values(item).map((value) => {
-                  return <td>{value}</td>;
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    );
-  };
-
   return (
     <div className="App">
-      <h1>Hot Repos</h1>
-      {constructTable(hotReposData)}
-      <h1>Prolific Users</h1>
-      {constructTable(prolificUsersData)}
+      <section className="AppSection">
+        <h1 className="AppTitle">Hot Repos</h1>
+        <button
+          className="AppButton"
+          type="button"
+          id="hot_repo"
+          onClick={() => fetchRepoData()}
+        >
+          Refresh Repos
+        </button>
+        {errRepo ? <p>{errRepo}</p> : <Table data={hotReposData} />}
+      </section>
+      <section className="AppSection">
+        <h1 className="AppTitle">Prolific Users</h1>
+        <button
+          className="AppButton"
+          type="button"
+          id="prolific_users"
+          onClick={() => fetchUserData()}
+        >
+          Refresh Users
+        </button>
+        {errUser ? <p>{errUser}</p> : <Table data={prolificUsersData} />}
+      </section>
     </div>
   );
 }
