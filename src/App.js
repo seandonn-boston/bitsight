@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [topFiveRepos, setTopFiveRepos] = useState({});
+  const [topFiveUsers, setTopFiveUsers] = useState({});
+
+  const fetchRepoData = () => {
+    fetch(
+      "https://api.github.com/search/repositories?q=created:2020-11-01..2020-12-01&sort=stars&order=desc&per_page=5"
+    )
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  };
+
+  const fetchUserData = () => {
+    fetch(
+      "https://api.github.com/search/repositories?q=created:2020-11-01..2020-12-01&sort=stars&order=desc&per_page=5"
+    )
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    // fetchRepoData();
+    // fetchUserData();
+    setInterval(() => {
+      fetchUserData();
+    }, 120000);
+  }, []);
+
+  return <div className="App">hello world</div>;
 }
 
 export default App;
