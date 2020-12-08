@@ -26,9 +26,10 @@ function App() {
   useEffect(() => {
     // fetchRepoData();
     // fetchUserData();
-    setInterval(() => {
+    const interval = setInterval(() => {
       fetchUserData();
     }, 120000);
+    return () => clearInterval(interval);
   }, []);
 
   return <div className="App">hello world</div>;
