@@ -2,13 +2,22 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
-  const [hotReposData, setHotReposData] = useState({});
-  const [prolificUsersData, setProlificUserData] = useState({
-    id: "",
-    login: "",
-    avatarImage: "",
-    followers: "",
-  });
+  const [hotReposData, setHotReposData] = useState([
+    {
+      id: "test",
+      name: "test",
+      description: "test",
+      stars: "test",
+    },
+  ]);
+  const [prolificUsersData, setProlificUserData] = useState([
+    {
+      id: "test",
+      login: "test",
+      avatarImage: "test",
+      followers: "test",
+    },
+  ]);
   const [errRepo, setErrRepo] = useState(null);
   const [errUser, setErrUser] = useState(null);
 
@@ -61,8 +70,7 @@ function App() {
               };
             }
           );
-          console.log(parsedData);
-          setProlificUserData(data);
+          setProlificUserData(parsedData);
         }
       })
       .catch((err) => {
@@ -80,7 +88,39 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  return <div className="App">hello world</div>;
+  const constructTable = (data) => {
+    return (
+      <table>
+        <thead>
+          <tr>
+            {Object.keys(data[0]).map((key) => {
+              return <th>{key}</th>;
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item) => {
+            return (
+              <tr>
+                {Object.values(item).map((value) => {
+                  return <td>{value}</td>;
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    );
+  };
+
+  return (
+    <div className="App">
+      <h1>Hot Repos</h1>
+      {constructTable(hotReposData)}
+      <h1>Prolific Users</h1>
+      {constructTable(prolificUsersData)}
+    </div>
+  );
 }
 
 export default App;
